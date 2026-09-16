@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ethan Starr | GIS & Data Science</title>
+<style>
+  
+  :root {
+    --navy: #0a2540;
+    --navy-light: #12395f;
+    --blue: #007ac2;
+    --sky: #4db8ff;
+    --light: #eaf4fb;
+    --text: #1a1a1a;
+    --muted: #5a6b7b;
+    --white: #ffffff;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text); background: var(--white); line-height: 1.6;
+  }
+  header {
+    background: var(--navy); color: var(--white);
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  }
+  .storymap-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 62%; /* controls the height/aspect ratio */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .storymap-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+  nav {
+    max-width: 1200px; margin: auto; display: flex;
+    justify-content: space-between; align-items: center; padding: 1rem 1.5rem;
+  }
+    .featured-project {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .featured-img img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    display: block;
+  }
+  .featured-text p { color: var(--muted); }
+  @media (max-width: 768px) {
+    .featured-project { grid-template-columns: 1fr; }
+  }
+  nav .logo { font-weight: bold; font-size: 1.25rem; letter-spacing: 1px; }
+  nav .logo span { color: var(--sky); }
+  nav ul { display: flex; list-style: none; gap: 1rem; align-items: center; }
+  .tab-btn {
+    background: none; border: none; color: var(--white); font-size: 1rem;
+    cursor: pointer; padding: .5rem 1.2rem; border-radius: 4px;
+    transition: background .2s; font-family: inherit;
+  }
+  .tab-btn:hover { background: var(--navy-light); }
+  .tab-btn.active { background: var(--blue); font-weight: 600; }
+  .resume-btn {
+    background: var(--white); color: var(--navy); padding: .45rem 1rem;
+    border-radius: 4px; font-weight: 600; text-decoration: none; transition: opacity .2s;
+  }
+  .resume-btn:hover { opacity: .85; }
+  .hero {
+    position: relative; color: var(--white); text-align: center; padding: 7rem 1.5rem;
+    background: linear-gradient(rgba(10,37,64,0.78), rgba(10,37,64,0.85)),
+      url('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=1600&q=80') center/cover;
+  }
+  .hero h1 { font-size: 3rem; margin-bottom: .5rem; }
+  .hero p.tagline { font-size: 1.3rem; opacity: .95; margin-bottom: 1.8rem; }
+  .hero .btns a {
+    display: inline-block; margin: .4rem; padding: .8rem 1.8rem;
+    border-radius: 4px; text-decoration: none; font-weight: 600; transition: transform .15s;
+  }
+  .btn-primary { background: var(--blue); color: var(--white); }
+  .btn-outline { border: 2px solid var(--white); color: var(--white); }
+  .hero .btns a:hover { transform: translateY(-3px); }
+  .page { display: none; animation: fade .4s ease; }
+  .page.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px);} to {opacity:1; transform:none;} }
+  section { max-width: 1200px; margin: auto; padding: 4rem 1.5rem; }
+  section h2 {
+    color: var(--navy); font-size: 2.1rem; margin-bottom: 1.5rem;
+    position: relative; display: inline-block;
+  }
+  section h2::after {
+    content: ''; position: absolute; left: 0; bottom: -8px;
+    width: 60px; height: 4px; background: var(--blue); border-radius: 2px;
+  }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: center; }
+  .about-grid img { width: 100%; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+  .card {
+    background: var(--white); border-radius: 10px; padding: 1.5rem; margin-bottom: 1.2rem;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08); border-left: 4px solid var(--blue);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 22px rgba(0,0,0,0.14); }
+  .card h3 { color: var(--navy); margin-bottom: .2rem; }
+  .card .meta { color: var(--muted); font-size: .9rem; margin-bottom: .6rem; }
+  .card ul { margin-left: 1.2rem; }
+  .skills-grid { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1rem; }
+  .skill-tag {
+    background: var(--light); color: var(--navy); padding: .5rem 1.1rem; border-radius: 20px;
+    font-size: .9rem; font-weight: 600; border: 1px solid #cfe4f5; transition: background .2s, color .2s;
+  }
+  .skill-tag:hover { background: var(--blue); color: var(--white); }
+  .section-alt-wrap { background: var(--light); }
+  .intro-banner {
+    background: linear-gradient(rgba(10,37,64,0.7), rgba(0,122,194,0.7)),
+      url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80') center/cover;
+    color: var(--white); text-align: center; padding: 4rem 1.5rem;
+  }
+  .intro-banner h2 { color: var(--white); }
+  .intro-banner h2::after { background: var(--white); left: 50%; transform: translateX(-50%); }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+  .project-card {
+    background: var(--white); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1); transition: transform .25s, box-shadow .25s;
+    display: flex; flex-direction: column;
+  }
+  .project-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.18); }
+  .project-card img { width: 100%; height: 200px; object-fit: cover; }
+  .project-body { padding: 1.4rem; flex: 1; display: flex; flex-direction: column; }
+  .project-body h3 { color: var(--navy); margin-bottom: .5rem; }
+  .project-body p { color: var(--muted); flex: 1; }
+  .project-tags { margin: .8rem 0; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .project-tags span {
+    background: var(--light); color: var(--blue); font-size: .75rem;
+    padding: .25rem .6rem; border-radius: 12px; font-weight: 600;
+  }
+  .project-link {
+    display: inline-block; margin-top: .5rem; background: var(--blue); color: var(--white);
+    text-decoration: none; padding: .6rem 1.2rem; border-radius: 4px; font-weight: 600;
+    text-align: center; transition: background .2s;
+  }
+  .project-link:hover { background: var(--navy); }
+  #contactSection { text-align: center; }
+  .contact-info { font-size: 1.1rem; }
+  .contact-info a { color: var(--blue); text-decoration: none; }
+  .contact-info a:hover { text-decoration: underline; }
+  footer { background: var(--navy); color: var(--white); text-align: center; padding: 1.8rem; font-size: .9rem; }
+  footer span { color: var(--sky); }
+  @media (max-width: 768px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.1rem; }
+    nav .logo { font-size: 1rem; }
+    .tab-btn { padding: .5rem .7rem; font-size: .9rem; }
+  }
+</style>
+</head>
+<script>
+  function showTab(pageId, btn) {
+    // hide all pages
+    document.querySelectorAll('.page').forEach(function(p) {
+      p.classList.remove('active');
+    });
+    // show selected page
+    document.getElementById(pageId).classList.add('active');
+
+    // update active nav button
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    if (btn) btn.classList.add('active');
+
+    // scroll back to top when switching tabs
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">ETHAN <span>STARR</span></div>
+    <ul>
+      <li><button class="tab-btn active" onclick="showTab('about', this)">About Me</button></li>
+      <li><button class="tab-btn" onclick="showTab('projects', this)">Projects</button></li>
+      <li><a href="resume2026.pdf" download class="resume-btn">Resume</a></li>
+    </ul>
+  </nav>
+</header>
+<!-- ================= ABOUT PAGE ================= -->
+<div id="about" class="page active">
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Ethan Starr</h1>
+    <p class="tagline">GIS &amp; Data Science | ArcGIS Pro Specialist | Spatial Problem Solver</p>
+    <div class="btns">
+      <a href="#" class="btn-primary" onclick="showTab('projects', document.querySelectorAll('.tab-btn')[1]); return false;">View My Projects</a>
+      <a href="mailto:ethanwstarr@tamu.edu" class="btn-outline">Contact Me</a>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section>
+    <div class="about-grid">
+      <div>
+        <h2>About Me</h2>
+        <p>
+          Motivated Geographic Information Systems and Technology student at Texas A&amp;M University
+          with 3+ years of experience using ArcGIS Pro and hands-on experience supporting GIS projects
+          across the university. Skilled in geospatial analysis, map development, data management, and
+          troubleshooting complex GIS issues.
+        </p>
+        <br>
+        <p>
+          A proven leader with experience guiding groups of up to 40 people through challenging,
+          high-stress environments while maintaining a calm, positive, and authoritative presence.
+          A strong communicator and collaborative team member who works effectively with multiple
+          departments and diverse groups to develop accurate, high-quality solutions.
+        </p>
+      </div>
+      <div>
+        <img src="https://www.tamu.edu/_files/images/research/aerial-tamu-campus-entrance.JPG" alt="Geospatial data visualization">
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <div class="section-alt-wrap">
+    <section>
+      <h2>Experience</h2>
+
+      <div class="card">
+        <h3>GIS Intern — Texas A&amp;M Transportation Department</h3>
+        <div class="meta">June 2026 – Present</div>
+        <ul>
+          <li>Worked on projects throughout the summer and during the 2026 school year.</li>
+          <li>Delivered a multimodal network dataset, event maps for campus events, and updated/repaired the official campus map (Aggiemap).</li>
+          <li>Collaborated with multiple departments across Texas A&amp;M to ensure the finalized product is approved and consistent everywhere.</li>
+          <li>Performed extensive problem solving to troubleshoot fixes for Aggiemap and the multimodal network dataset.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Hiking Guide — TREK Team Ascend, Rocky Mountains, Colorado</h3>
+        <div class="meta">May – August 2025</div>
+        <ul>
+          <li>Led groups of up to 40 people through the Rocky Mountain wilderness to summit a 14,000 ft. mountain.</li>
+          <li>Coached and counseled hundreds of high-school-aged campers, helping them up the mountain.</li>
+          <li>Maintained a calm and authoritative presence in dangerous, high-stress situations.</li>
+          <li>Managed hiking routes, delegated responsibilities, resolved unexpected challenges, and kept a positive attitude.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <!-- EDUCATION -->
+  <section>
+    <h2>Education &amp; Involvement</h2>
+
+    <div class="card">
+      <h3>B.S. Geographic Information Systems &amp; Technology — Texas A&amp;M University</h3>
+      <div class="meta">College Station, Texas | August 2023 – Present</div>
+      <ul>
+        <li>3+ years using ArcGIS Pro.</li>
+        <li>Project outlining trends of education levels and average income across the U.S. at the county level.</li>
+        <li>Project exploring the relationship between land use and crime in Houston.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>James Martin High School — Arlington, Texas</h3>
+      <div class="meta">Graduated May 2023, With Honors</div>
+    </div>
+
+    <div class="card">
+      <h3>The Singing Cadets — Texas A&amp;M University</h3>
+      <div class="meta">Section Leader | August 2023 – Present</div>
+      <p>
+        Member of an elite all-male choir founded in 1893, dedicated to enhancing the public relations
+        of Texas A&amp;M University through musical presentations and developing disciplined leaders of
+        character. Serves in a leadership position as Section Leader, building up others and fostering a
+        tradition of excellence.
+      </p>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <div class="section-alt-wrap">
+    <section>
+      <h2>Skills</h2>
+      <div class="skills-grid">
+        <span class="skill-tag">ArcGIS Pro</span>
+        <span class="skill-tag">ArcGIS StoryMaps</span>
+        <span class="skill-tag">Geospatial Analysis</span>
+        <span class="skill-tag">Data Management</span>
+        <span class="skill-tag">Map Development</span>
+        <span class="skill-tag">Java</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">Excel</span>
+        <span class="skill-tag">Team Leadership</span>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contactSection">
+    <h2 style="display:inline-block;">Get In Touch</h2>
+    <div class="contact-info" style="margin-top:1rem;">
+      <p>📍 College Station, TX</p>
+      <p>📞 <a href="tel:6823528757">682-352-8757</a></p>
+      <p>✉️ <a href="mailto:ethanwstarr@tamu.edu">ethanwstarr@tamu.edu</a></p>
+    </div>
+  </section>
+
+</div>
+<!-- ================= PROJECTS PAGE ================= -->
+<div id="projects" class="page">
+
+  <!-- PROJECTS INTRO BANNER -->
+  <div class="intro-banner">
+    <h2>My ArcGIS Project</h2>
+    <p style="max-width:700px; margin:1rem auto 0; font-size:1.1rem;">
+      A county-level geospatial analysis exploring the relationship between education levels and
+      average income across the United States — built with ArcGIS StoryMaps.
+    </p>
+  </div>
+
+  <!-- FEATURED PROJECT -->
+  <section>
+    <div class="featured-project">
+      <div class="featured-img">
+        <img src="Storymap_Screenshot.png" alt="Income and Education Across the U.S. StoryMap preview">
+      </div>
+      <div class="featured-text">
+        <h2 style="display:inline-block;">Income &amp; Education Across the U.S.</h2>
+        <div class="project-tags" style="margin:1rem 0;">
+          <span>ArcGIS StoryMaps</span>
+          <span>Choropleth</span>
+          <span>Spatial Analysis</span>
+        </div>
+        <p>
+          A county-level analysis exploring the trends and relationships between education levels and
+          average income across the United States. Built in ArcGIS StoryMaps, this project combines
+          choropleth mapping and spatial analysis to reveal geographic patterns in how education
+          and income relate across the country.
+        </p>
+        <a href="https://storymaps.arcgis.com/stories/7ce822f1307a467489c0f935111608c7"
+           class="project-link" target="_blank" rel="noopener"
+           style="margin-top:1.5rem;">
+          View Full Project →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS CONTACT CTA -->
+  <div class="section-alt-wrap">
+    <section id="contactSection">
+      <h2 style="display:inline-block;">Interested in Working Together?</h2>
+      <div class="contact-info" style="margin-top:1rem;">
+        <p>Let's connect about GIS &amp; data science opportunities.</p>
+        <p>✉️ <a href="mailto:ethanwstarr@tamu.edu">ethanwstarr@tamu.edu</a></p>
+        <p>📞 <a href="tel:6823528757">682-352-8757</a></p>
+      </div>
+    </section>
+  </div>
+
+  </section>
+
+</div>
